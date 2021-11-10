@@ -1,0 +1,31 @@
+<launch>
+    <include file="$(find experience_scenarios)/launch/empty_underwater_world.launch">
+
+    </include>
+
+    <include file="$(find rexrov2_description)/launch/upload_rexrov2.launch">
+
+    </include>
+    <arg name="gui_on" default="true" doc="Start Gazebo client and RViz"/>
+    <arg name="uuv_name" default="rexrov2"/>
+    <arg name="model_name" default="rexrov2"/>
+    <!-- Thruster manager configuration -->
+    <arg name="thruster_manager_output_dir" default="$(find rexrov2_control)/config" doc="Output directory for the generated thruster manager"/>
+    <arg name="thruster_manager_config_file" default="$(find rexrov2_control)/config/thruster_manager.yaml" doc="File storing the configuration of the thruster manager"/>
+    <arg name="tam_file" default="$(find rexrov2_control)/config/TAM.yaml" doc="File storing the thruster allocation matrix"/>
+
+    <!-- Start the thruster allocation manager -->
+    <include file="$(find uuv_thruster_manager)/launch/thruster_manager.launch">
+      <arg name="uuv_name" value="$(arg uuv_name)" />
+      <arg name="model_name" value="$(arg model_name)" />
+      <arg name="output_dir" value="$(arg thruster_manager_output_dir)" />
+      <arg name="config_file" value="$(arg thruster_manager_config_file)" />
+      <arg name="tam_file" value="$(arg tam_file)" />
+    </include>
+
+    <!-- Start RViz  -->
+    <group if="$(arg gui_on)">
+      <node name="rviz" pkg="rviz" type="rviz" output="screen" args="-d $(find rexrov2_control)/rviz/rexrov2_control.rviz"/>
+      <node name="rqt_gui" pkg="rqt_gui" type="rqt_gui"/>
+    </group>
+</launch>
