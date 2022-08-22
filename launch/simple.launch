@@ -1,18 +1,33 @@
 <launch>
-    <include file="$(find experience_scenarios)/launch/empty_underwater_world.launch">
-
-    </include>
-
-    <include file="$(find rexrov2_description)/launch/upload_rexrov2.launch">
-
-    </include>
-    <arg name="gui_on" default="true" doc="Start Gazebo client and RViz"/>
+    <arg name="rviz_gui_on" default="false" doc="Start RViz gui client"/>
+    <arg name="rqt_gui_on" default="false" doc="Start Rqt gui client"/>
+	  <arg name="headless" value="true" doc="Run uuv sim headlessly"/>
+	  <arg name="gui" value="false"/>
     <arg name="uuv_name" default="rexrov2"/>
     <arg name="model_name" default="rexrov2"/>
+    <arg name="dollar" default="$"/>
+    <arg name="model_control" value="(find $(arg model_name)_control)"/>
+    <arg name="model_description" value="(find $(arg model_name)_description)"/>
     <!-- Thruster manager configuration -->
-    <arg name="thruster_manager_output_dir" default="$(find rexrov2_control)/config" doc="Output directory for the generated thruster manager"/>
-    <arg name="thruster_manager_config_file" default="$(find rexrov2_control)/config/thruster_manager.yaml" doc="File storing the configuration of the thruster manager"/>
-    <arg name="tam_file" default="$(find rexrov2_control)/config/TAM.yaml" doc="File storing the thruster allocation matrix"/>
+    <arg name="thruster_manager_output_dir"
+         default="$(arg dollar)$(arg model_control)/config"
+         doc="Output directory for the generated thruster manager"/>
+
+    <arg name="thruster_manager_config_file"
+         default="$(arg dollar)$(arg model_control)/config/thruster_manager.yaml"
+         doc="File storing the configuration of the thruster manager"/>
+
+    <arg name="tam_file"
+         default="$(arg dollar)$(arg model_control)/config/TAM.yaml"
+         doc="File storing the thruster allocation matrix"/>
+
+    <include file="$(find experience_scenarios)/launch/empty_underwater_world.launch">
+      <arg name="gui" value="$(arg gui)"/>
+      <arg name="headless" value="$(arg headless)"/>
+    </include>
+
+    <include file="$(arg dollar)$(arg model_description)/launch/upload_$(arg model_name).launch">
+    </include>
 
     <!-- Start the thruster allocation manager -->
     <include file="$(find uuv_thruster_manager)/launch/thruster_manager.launch">
@@ -24,8 +39,10 @@
     </include>
 
     <!-- Start RViz  -->
-    <group if="$(arg gui_on)">
-      <node name="rviz" pkg="rviz" type="rviz" output="screen" args="-d $(find rexrov2_control)/rviz/rexrov2_control.rviz"/>
+    <group if="$(arg rviz_gui_on)">
+      <node name="rviz" pkg="rviz" type="rviz" output="screen" args="-d $(arg dollar)$(arg model_control)/rviz/$(arg model_name)_control.rviz"/>
+    </group>
+    <group if="$(arg rqt_gui_on)">
       <node name="rqt_gui" pkg="rqt_gui" type="rqt_gui"/>
     </group>
 </launch>
