@@ -5,6 +5,7 @@
 	  <arg name="gui" value="false"/>
     <arg name="uuv_name" default="rexrov2"/>
     <arg name="model_name" default="rexrov2"/>
+    <arg name="mode" default="diag"/>
     <arg name="dollar" default="$"/>
     <arg name="model_control" value="(find $(arg model_name)_control)"/>
     <arg name="model_description" value="(find $(arg model_name)_description)"/>
@@ -26,7 +27,7 @@
       <arg name="headless" value="$(arg headless)"/>
     </include>
 
-    <include file="$(arg dollar)$(arg model_description)/launch/upload_$(arg model_name).launch">
+    <include file="$(arg dollar)$(arg model_description)/launch/upload_$(arg model_name)$(arg mode).launch">
     </include>
 
     <!-- Start the thruster allocation manager -->
