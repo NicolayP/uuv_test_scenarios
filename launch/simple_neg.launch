@@ -28,7 +28,7 @@
       <arg name="paused" value="true"/>
     </include>
 
-    <include file="$(arg dollar)$(arg model_description)/launch/upload_$(arg model_name)_$(arg mode).launch">
+    <include file="$(arg dollar)$(arg model_description)/launch/upload_$(arg model_name)_$(arg mode)_neg.launch">
     </include>
 
     <!-- Start the thruster allocation manager -->
