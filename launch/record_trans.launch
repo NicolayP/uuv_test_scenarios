@@ -1,0 +1,12 @@
+<launch>
+    <arg name="uuv_name"/>
+    <arg name="pose_topic"/>
+    <arg name="input_topic"/>
+    <arg name="bag_file"/>
+
+    <node pkg="rosbag" type="record" name="record"
+          args="record -O $(arg bag_file) 
+               $(arg uuv_name)/$(arg pose_topic) 
+               $(arg uuv_name)/$(arg input_topic)">
+    </node>
+</launch>

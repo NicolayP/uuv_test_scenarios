@@ -1,0 +1,9 @@
+<launch>
+    <arg name="model_name" default="rexrov2"/>
+    <arg name="mode" default="diag"/>
+    <arg name="dollar" default="$"/>
+    <arg name="model_description" value="(find $(arg model_name)_description)"/>
+
+    <include file="$(arg dollar)$(arg model_description)/launch/upload_$(arg model_name)_$(arg mode)_urdf.launch">
+    </include>
+</launch>
